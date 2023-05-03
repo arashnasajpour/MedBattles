@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatGPT Interface</title>
+  <style>
+    .userMessage {
+      background-color: #cce5ff;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+
+    .chatGPTMessage {
+      background-color: #f8d7da;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div id="chatContainer" style="border: 1px solid black; height: 300px; overflow-y: scroll; padding: 10px;"></div>
+  <input type="text" id="messageInput" style="width: 80%;" />
+  <button id="sendButton">Send</button>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const sendButton = document.getElementById("sendButton");
+      const messageInput = document.getElementById("messageInput");
+
+      sendButton.addEventListener("click", handleSendMessage);
+      messageInput.addEventListener("keypress", handleKeyPress);
+    });
+
+    function handleKeyPress(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        handleSendMessage();
+      }
+    }
+
+    async function handleSendMessage() {
+      const userMessage = messageInput.value;
+      messageInput.value = "";
+
+      addUserMessageToChat(userMessage);
+
+      const chatGPTResponse = await fetchChatGPT(userMessage);
+
+      addChatGPTResponseToChat(chatGPTResponse);
+    }
+
+    function addUserMessageToChat(message) {
+      const messageElement = document.createElement('div');
+      messageElement.className = 'userMessage';
+      messageElement.innerText = message;
+
+      const container = document.getElementById('chatContainer');
+      container.appendChild(messageElement);
+    }
+
+    function addChatGPTResponseToChat(response) {
+      const responseElement = document.createElement('div');
+      responseElement.className = 'chatGPTMessage';
+      responseElement.innerText = response;
+
+      const container = document.getElementById('chatContainer');
+      container.appendChild(responseElement);
+    }
+
+    // Replace this function with a call to the OpenAI API using your API key
+    // You may need to set up a server-side script to make the API request securely
+    async function fetchChatGPT(message) {
+      // Your API call logic here
+      return "ChatGPT response for: " + message;
+    }
+  </script>
+</body>
+</html>
